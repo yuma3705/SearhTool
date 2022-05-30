@@ -1,0 +1,12 @@
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\bin\Debug\なんでも検索ツール.exe.config
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\bin\Debug\なんでも検索ツール.exe
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\bin\Debug\なんでも検索ツール.pdb
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Form1.resources
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Properties.Resources.resources
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.csproj.GenerateResource.cache
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.csproj.CoreCompileInputs.cache
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.exe
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.pdb
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.csproj.AssemblyReference.cache
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Form2.resources
+C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Form3.resources
