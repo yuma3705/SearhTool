@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<buttonList>
+  <property1>
+    <ExePath>C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</ExePath>
+    <Text>Microsoft Edge</Text>
+    <Argument></Argument>
+    <KeyAction>1</KeyAction>
+  </property1>
+  <property2>
+    <ExePath>explorer.exe</ExePath>
+    <Text>EXPLOER</Text>
+    <Argument></Argument>
+    <KeyAction>0</KeyAction>
+  </property2>
+  <property3>
+    <ExePath>C:\Program Files\Google\Chrome\Application\chrome.exe</ExePath>
+    <Text>しろぼん</Text>
+    <Argument>https://shirobon.net/medicalfee/latest/ika/r04_ika/r04i_ch1/r04i1_pa1/?search_keyword=</Argument>
+    <KeyAction>0</KeyAction>
+  </property3>
+  <property4>
+    <ExePath>C:\Program Files\Google\Chrome\Application\chrome.exe</ExePath>
+    <Argument>https://www.google.com/maps/search/</Argument>
+    <Text>GoogleMap</Text>
+    <KeyAction>0</KeyAction>
+  </property4>
+  <property5>
+    <type>2</type>
+    <ExePath>C:\Users\inoue\Desktop\フォルダ\document.pdf</ExePath>
+    <Text>document.pdf</Text>
+    <KeyAction>2</KeyAction>
+    <Argument></Argument>
+  </property5>
+  <property6>
+    <type>2</type>
+    <ExePath>C:\Program Files\Everything\Everything.exe</ExePath>
+    <Text>everything</Text>
+    <KeyAction>3</KeyAction>
+    <Argument></Argument>
+  </property6>
+  <property7>
+    <type>2</type>
+    <ExePath>C:\TresGrep\TresGrep.exe</ExePath>
+    <Text>TresGrep.exe</Text>
+    <KeyAction>0</KeyAction>
+    <Argument></Argument>
+  </property7>
+</buttonList>

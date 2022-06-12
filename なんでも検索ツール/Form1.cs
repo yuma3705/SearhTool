@@ -20,10 +20,8 @@ namespace なんでも検索ツール
         public XElement xml;
 
         private List<Button> buttonList = new List<Button>();
-
-        Color ColorForm = Color.Chocolate;
-        Color Colorbtn = Color.Chocolate;
         int intButtonSize = 70;
+        int Buttons = 12;
     
         public Form1()
         {
@@ -37,11 +35,11 @@ namespace なんでも検索ツール
         }
         public void Clear()
         {
-            for (int r = 1; r <= 16; r++)
+            for (int r = 1; r <= 12; r++)
             {
                 buttonList[r - 1].Dispose();
             }
-            buttonList.Clear();
+            buttonList = new List<Button>();
         }
 
         public void Update()
@@ -49,20 +47,21 @@ namespace なんでも検索ツール
             string strOptionPath = Application.StartupPath + "/option.xml";
             xml = XElement.Load(strOptionPath);
         }
+
         public void FormLoad()
         {
-            for (int r = 1; r <= 16; r++)
+            for (int r = 1; r <= Buttons; r++)
             {
                 Button button = new System.Windows.Forms.Button();
 
                 if (r > 7)
                 {
-                    ButtonSet(ref button, "property" + r.ToString(), 3 + intButtonSize * (r-9),94, r);
+                    ButtonSet(ref button, "property" + r.ToString(), 3 + intButtonSize * (r-9),114, r);
                     
                 }
                 else
                 {
-                    ButtonSet(ref button, "property" + r.ToString(), 3 + intButtonSize * (r-1), 27, r);
+                    ButtonSet(ref button, "property" + r.ToString(), 3 + intButtonSize * (r-1), 44, r);
                 }
                 buttonList.Add(button);
             }
@@ -74,7 +73,7 @@ namespace なんでも検索ツール
             if (a.Count() > 0)
             {
                 XElement xElement = (from item in xml.Elements(Property) select item).Single();
-
+                Console.WriteLine(xElement.Element("Text").Value);
                 button.Location = new System.Drawing.Point(x, y);
                 button.Name = Number.ToString();
                 button.Size = new System.Drawing.Size(intButtonSize, intButtonSize);
@@ -112,68 +111,50 @@ namespace なんでも検索ツール
 
         }
 
-        private void Keydownaction(object sender, KeyEventArgs e)
-        {
-            XElement xElement = (from item in xml.Elements("property" + ((System.Windows.Forms.Control)sender).Name) select item).Single();
-            int intNumber = int.Parse(xElement.Element("type").Value);
-            int intCount = 0;
-
-            switch (intNumber)
-            {
-                case 0: // Google検索用
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                    KeyAction(int.Parse(xElement.Element("KeyAction").Value));
-                    break;
-                case 1: // エクスプローラ用
-                    System.Diagnostics.Process.Start("EXPLORER.EXE", comboBox1.Text);
-                    break;
-                case 2: //ローカルファイル用
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                    KeyAction(int.Parse(xElement.Element("KeyAction").Value));
-                    break;
-                case 3: //リンクを開くだけでOK
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, xElement.Element("Argument").Value + comboBox1.Text);
-                    break;
-                default:
-                    break;
-            }
-            HistoyItms_Write();
-            HistoryGet();
-        }
         private void buttonClickaction(object sender, MouseEventArgs e)
         {
             XElement xElement = (from item in xml.Elements("property" + ((System.Windows.Forms.Control)sender).Name) select item).Single();
-            int intNumber = int.Parse(xElement.Element("type").Value);
+            int intActionNumber = 0;
             int intCount = 0;
+
+            if (xElement.Element("Argument").Value == "")
+            {
+                intActionNumber = 0;
+            }
+            if (xElement.Element("Argument").Value != "")
+            {
+                intActionNumber = 1;
+            }
+            if (xElement.Element("ExePath").Value == "explorer.exe")
+            {
+                intActionNumber = 2;
+            }
+
 
             if (e.Button == MouseButtons.Left)
             {
-                switch (intNumber)
+                switch (intActionNumber)
                 {
-                    case 0: // Google検索用
-                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                        KeyAction(int.Parse(xElement.Element("KeyAction").Value));
+                    case 0: //引数なし
+                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);                       
                         break;
-                    case 1: // エクスプローラ用
-                        System.Diagnostics.Process.Start("EXPLORER.EXE", comboBox1.Text);
-                        break;
-                    case 2: //ローカルファイル用
-                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                        KeyAction(int.Parse(xElement.Element("KeyAction").Value));
-                        break;
-                    case 3: //リンクを開くだけでOK
+                    case 1: // 引数あり
                         System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, xElement.Element("Argument").Value + comboBox1.Text);
+                        break;
+                    case 2: // エクスプローラ用
+                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, comboBox1.Text);
                         break;
                     default:
                         break;
                 }
+                KeyAction(int.Parse(xElement.Element("KeyAction").Value));
                 HistoyItms_Write();
                 HistoryGet();
 
             }
             if (e.Button == MouseButtons.Right)
             {
-                for (int r = 1; r <= 20; r++)
+                for (int r = 1; r <= Buttons; r++)
                 {
                     var a = from item in xml.Elements("property" + r.ToString()) select item;
                     if (a.Count() == 0)
@@ -183,7 +164,6 @@ namespace なんでも検索ツール
                     }
                 }
                 ButtonEdit(int.Parse(((System.Windows.Forms.Control)sender).Name));
-                //buttonLeave(intCount);
             }
 
         }
@@ -191,30 +171,14 @@ namespace なんでも検索ツール
         private void ButtonEdit(int intNumber)
         {
             Form2 form2 = new Form2(intNumber);
+            form2.FormClosed += new FormClosedEventHandler(Form2_FormClosed);
             form2.Show();
         }
 
-        private void buttonLeave(int intNumber)
+        //Form2が閉じた時
+        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
         {
-            XElement xElement = (from item in xml.Elements("property" + intNumber.ToString()) select item).Single();
-            xElement.Remove();
-            xml.Save(Application.StartupPath + "/option.xml");
-            Clear();
-            Update();
-            FormLoad();
-        }
-        public void ResetNumber(int intNumber)
-        {
-            for (int r = intNumber; r <= 20; r++)
-            {
-                var a = from item in xml.Elements("property" + r.ToString()) select item;
-                if (a.Count() != 0)
-                {
-                    int NewCount = r + 1;
-                    XElement element = a.Single();
-                    element.Name = "property" + NewCount.ToString();
-                }
-            }
+            Application.Restart();
         }
 
         public void ClipInput()
@@ -254,6 +218,12 @@ namespace なんでも検索ツール
                     ClipInput();
                     Thread.Sleep(1000);
                     writeKeys("^F");
+                    writeKeys("^V");
+                    writeKeys("{ENTER}");
+                    break;
+                case 3:
+                    ClipInput();
+                    Thread.Sleep(1000);
                     writeKeys("^V");
                     writeKeys("{ENTER}");
                     break;
@@ -317,7 +287,7 @@ namespace なんでも検索ツール
 
         public void HistoryGet()
         {
-            string strHistroy_Kind = comboBox2.Text;
+            string strHistroy_Kind = "web";
             comboBox1.Items.Clear();
             string filePath = Application.StartupPath + "/" + strHistroy_Kind +".txt";
 
@@ -346,38 +316,6 @@ namespace なんでも検索ツール
             }
         }
 
-        private void comboBox2_TextChanged(object sender, EventArgs e)
-        {
-            HistoryGet();
-        }
-
-        private void Form1_DragEnter(object sender, DragEventArgs e)
-        {
-            string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-
-            int intCount = 0;
-            for (int r = 1; r <= 20; r++)
-            {
-                var a = from item in xml.Elements("property" + r.ToString()) select item;
-                if (a.Count() == 0)
-                {
-                    intCount = r;
-                    break;
-                }
-            }
-
-            var NewPropety = new XElement("property" + intCount.ToString(),
-                            new XElement("type", "2"),
-                            new XElement("ExePath", fileName[0]),
-                            new XElement("Text", Path.GetFileName(fileName[0])),
-                            new XElement("KeyAction", "2"),
-                            new XElement("Argument",""));
-            xml.Add(NewPropety);
-            xml.Save(Application.StartupPath + "/option.xml");
-            Update();
-            Clear();
-            FormLoad();
-        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -423,29 +361,139 @@ namespace なんでも検索ツール
         private void Key_Action(int FNumber)
         {
             XElement xElement = (from item in xml.Elements("property" + FNumber.ToString()) select item).Single();
-            int intNumber = int.Parse(xElement.Element("type").Value);
+            int intActionNumber = 0;
+            int intCount = 0;
 
-            switch (intNumber)
+            if (xElement.Element("Argument").Value == "")
             {
-                case 0: // Google検索用
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                    KeyAction(int.Parse(xElement.Element("KeyAction").Value));
-                    break;
-                case 1: // エクスプローラ用
-                    System.Diagnostics.Process.Start("EXPLORER.EXE", comboBox1.Text);
-                    break;
-                case 2: //ローカルファイル用
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
-                    KeyAction(int.Parse(xElement.Element("KeyAction").Value));
-                    break;
-                case 3: //リンクを開くだけでOK
-                    System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, xElement.Element("Argument").Value + comboBox1.Text);
-                    break;
-                default:
-                    break;
+                intActionNumber = 0;
             }
-            HistoyItms_Write();
+            if (xElement.Element("Argument").Value != "")
+            {
+                intActionNumber = 1;
+            }
+            if (xElement.Element("ExePath").Value == "explorer.exe")
+            {
+                intActionNumber = 2;
+            }
+
+                switch (intActionNumber)
+                {
+                    case 0: //引数なし
+                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value);
+                        break;
+                    case 1: // 引数あり
+                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, xElement.Element("Argument").Value + comboBox1.Text);
+                        break;
+                    case 2: // エクスプローラ用
+                        System.Diagnostics.Process.Start(xElement.Element("ExePath").Value, comboBox1.Text);
+                        break;
+                    default:
+                        break;
+                }
+                KeyAction(int.Parse(xElement.Element("KeyAction").Value));
+                HistoyItms_Write();
+                HistoryGet();
+        }
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+            int intCount = 0;
+            for (int r = 1; r <= 20; r++)
+            {
+                var a = from item in xml.Elements("property" + r.ToString()) select item;
+                if (a.Count() == 0)
+                {
+                    intCount = r;
+                    break;
+                }
+            }
+
+            var NewPropety = new XElement("property" + intCount.ToString(),
+                            new XElement("type", "2"),
+                            new XElement("ExePath", fileName[0]),
+                            new XElement("Text", Path.GetFileName(fileName[0])),
+                            new XElement("KeyAction", "2"),
+                            new XElement("Argument", ""));
+            xml.Add(NewPropety);
+            xml.Save(Application.StartupPath + "/option.xml");
+            ResetAction();
+            FormLoad();
+        }
+
+        private void ResetAction()
+        {
+            Update();
+            Clear();
+            XmlSort();
+            FormLoad();
+        }
+
+        private void wordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             HistoryGet();
+        }
+
+        private void pathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HistoryGet();
+        }
+
+        private void webToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HistoryGet();
+        }
+
+        private void 新規追加ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int intCount = 0;
+            for (int r = 1; r <= 20; r++)
+            {
+                var a = from item in xml.Elements("property" + r.ToString()) select item;
+                if (a.Count() == 0)
+                {
+                    intCount = r;
+                    break;
+                }
+            }
+
+            var NewPropety = new XElement("property" + intCount.ToString(),
+                new XElement("type", "2"),
+                new XElement("ExePath", ""),
+                new XElement("Text", ""),
+                new XElement("KeyAction", "2"),
+                new XElement("Argument", ""));
+            xml.Add(NewPropety);
+            xml.Save(Application.StartupPath + "/option.xml");
+
+            Form2 form2 = new Form2(intCount);
+            form2.FormClosed += new FormClosedEventHandler(Form2_FormClosed);
+            form2.Show();
+        }
+
+        private void XmlSort()
+        {
+            int intCount = 1;
+            XElement NewXElement = new XElement("buttonList");
+            for (int r = 1; r <= Buttons; r++)
+            {
+                var Check = from item in xml.Elements("property" + r.ToString()) select item;
+                if (Check.Count() == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    XElement xElement = (from item in xml.Elements("property" + r.ToString()) select item).Single();
+                    xElement.Name = "property" + intCount.ToString();
+                    NewXElement.Add(xElement);
+                    intCount += 1;
+                }
+            }
+
+            xml = NewXElement;
+            xml.Save(Application.StartupPath + "/option.xml");
         }
 
     }

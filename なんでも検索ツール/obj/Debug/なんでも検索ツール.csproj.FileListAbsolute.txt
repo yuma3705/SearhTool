@@ -9,4 +9,3 @@ C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツー
 C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.pdb
 C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.csproj.AssemblyReference.cache
 C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Form2.resources
-C:\Users\inoue\source\repos\なんでも検索ツール\なんでも検索ツール\obj\Debug\なんでも検索ツール.Form3.resources
